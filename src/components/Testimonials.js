@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
-
+import Features from './Features';
 
 let fontsize='10px';
 export default function Testimonials(props) {
@@ -40,7 +40,22 @@ export default function Testimonials(props) {
     }
   }
   const [text, setText]=useState('Have some balls and say something!!');
+  // const FeatureArr=["Capitalize","LowerCase","Clear","Who's the King?","What's the first word?","So, where was I?","Save something for yourself, will you?","Everything is one."];
+  const FeatureArr = [
+    {'index': 0, 'value': 'Capitalize'},
+    {'index': 1, 'value': 'LowerCase'},
+    {'index': 2, 'value': 'Clear'},
+    {'index': 3, 'value': "Who's the King?"},
+    {'index': 4, 'value': "What's the first word?"},
+    {'index': 5, 'value': 'So, where was I?'},
+    {'index': 5, 'value': 'Save something for yourself, will you?'},
+    {'index': 6, 'value': 'Everything is one.'}
+  ];
+
   let originaltext='Have some balls and say something!!';
+  const handleFeatureClick=(feature)=>{
+    console.log(feature);
+  }
   const handleUpClick=()=>{
     let newText=text.toUpperCase();
     setText(newText);
@@ -83,7 +98,7 @@ export default function Testimonials(props) {
   }
   const handleOnChange=(e)=>{
     setText(e.target.value);
-    props.DisplayAlert("On Change activated","success");
+    // props.DisplayAlert("On Change activated","success");
   }
   const handleClipboard=()=>{
     var text=document.getElementById("box");
@@ -98,20 +113,27 @@ export default function Testimonials(props) {
     setText(newtext.join(" "))
     props.DisplayAlert("Extra Spaces Removed","success");
   }
+  const featureHandlers = {
+    'Capitalize': handleUpClick,
+    'LowerCase': handleLowClick,
+    'Clear': handleClearClick,
+    "Who's the King?": handleReplaceClick,
+    "What's the first word?": handleFirstWordClick,
+    'So, where was I?': handleRevertClick,
+    'Save something for yourself, will you?': handleClipboard,
+    'Everything is one.': handleSpaces,
+  };
   return (
     <>
         <h2 style={{color:'red'}}>{props.heading}{props.name}{props.headingcont}</h2>
         <div className="mb-3">
         <textarea className="box" style={boxstyle} value={text} id="box" onChange={(e)=>handleOnChange(e)} rows="13"></textarea>
+        {FeatureArr.map((feature)=>{
+          return(
+          <button key = {feature.index} className='btn mx-4' onClick={featureHandlers[feature.value]}>{feature.value}</button>
+        )
+          })}
         </div>
-        <button className='btn mx-4' onClick={handleUpClick}>Capitalize</button>
-        <button className='btn mx-4' onClick={handleLowClick}>LowerCase</button>
-        <button className='btn mx-4' onClick={handleClearClick}>Clear</button>
-        <button className='btn mx-4' onClick={handleReplaceClick}>Who's the King?</button>
-        <button className='btn mx-4' onClick={handleFirstWordClick}>What's the first word?</button>
-        <button className='btn mx-3' onClick={handleRevertClick}>So, where was I?</button>
-        <button className='btn mx-4 my-3' onClick={handleClipboard}>Save something for yourself, will you?</button>
-        <button className='btn mx-4 my-3' onClick={handleSpaces}>Everything is one.</button>
     <div className='container'>
     <textarea style={boxstyle} placeholder="Enter font size above 15. If you give below 15, don't say I didn't warn you!! " onChange={(e)=>handleFontSize(e)}></textarea>
         <h2 className={`text-${props.mode==='light'?'dark':'light'}`}>{props.nextheading}</h2>
